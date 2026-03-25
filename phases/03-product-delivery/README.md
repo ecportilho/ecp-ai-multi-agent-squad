@@ -12,15 +12,18 @@ Arquitetar, implementar e validar a qualidade do produto seguindo os protótipos
 ## Agentes e Sequência
 1. **Software Architect** — Domain design + contratos de API + ADRs (baseado no tech_spec.md)
 2. **Back End Developer** — APIs + persistência (conforme tech_spec.md)
-3. **Front End Developer** — Interface + integração (conforme tech_spec.md + design_spec.md)
-4. **QA** — Qualidade, testes e relatório (cruzando ambos os specs)
+3. **AI Engineer** ∥ **Front End Developer** — Executados em paralelo após o Back End:
+   - **AI Engineer** — Chatbots, agentes autônomos, RAG e guardrails de IA (conforme tech_spec.md + Claude API)
+   - **Front End Developer** — Interface + integração (conforme tech_spec.md + design_spec.md)
+4. **QA** — Qualidade, testes e relatório (cruzando ambos os specs + cenários adversariais de IA)
 
 ## HITLs desta Fase
 | HITL | Pós | Pergunta Central |
 |------|-----|-----------------|
 | #7 | Arquiteto | Arquitetura sólida? Contratos de API prontos? |
 | #8 | Back End | APIs seguem contratos? Persistência correta? Testes passando? |
-| #9 | Front End | Front integrado com back? Design fiel ao design_spec.md e ao protótipo high-fi? |
+| #8.5 | AI Engineer | Soluções de IA integradas? Guardrails ativos contra prompt injection e vazamento? |
+| #9 | Front End | Front integrado com back e IA? Design fiel ao design_spec.md e ao protótipo high-fi? |
 | #10 | QA | Qualidade aprovada? Pronto para operar? |
 
 ## Critérios de Qualidade Mínimos (HITL #10)

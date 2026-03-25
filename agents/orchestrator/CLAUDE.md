@@ -79,7 +79,8 @@ FASE 03 — PRODUCT DELIVERY
   Input funcional: {REPO_DESTINO}/product_briefing_spec.md (para QA)
   → software-architect
   → backend-developer
-  → frontend-developer
+  → ai-engineer (paralelo com frontend-developer)
+  → frontend-developer (paralelo com ai-engineer)
   → qa
 
 FASE 04 — OPERAÇÃO DE PRODUTO
@@ -99,6 +100,7 @@ FASE 04 — OPERAÇÃO DE PRODUTO
 | #6 | PO Estruturação + 4 Riscos | 4 riscos aprovados? Pronto para Delivery? |
 | #7 | Software Architect | Arquitetura sólida? Contratos prontos? |
 | #8 | Back End Developer | APIs corretas? Persistência validada? |
+| #8.5 | AI Engineer | Soluções de IA integradas? Guardrails ativos? |
 | #9 | Front End Developer | Front integrado? Design fiel ao design_spec.md? |
 | #10 | QA | Qualidade aprovada? Pronto para operar? |
 | #11 | Operations | Ambiente pronto? Deploy autorizado? |

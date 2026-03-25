@@ -30,7 +30,8 @@
       "Bash(grep -r \"opt/foodflow\\\\|/root/\\\\|C:\\\\Users\" C:/Users/ecpor/projetos_git/ecp-digital-food --include=*.json --include=*.js --include=*.mjs --include=*.cjs --exclude-dir=node_modules)",
       "Bash(xargs wc:*)",
       "Bash(ls -la \"C:\\\\Users\\\\ecpor\\\\projetos_git\\\\ecp-digital-food\\\\03-product-delivery\\\\.env\"*)",
-      "Bash(ssh -o StrictHostKeyChecking=no root@191.101.78.38 \"pm2 logs foodflow --lines 30 --nostream 2>&1\")"
+      "Bash(ssh -o StrictHostKeyChecking=no root@191.101.78.38 \"pm2 logs foodflow --lines 30 --nostream 2>&1\")",
+      "Bash(grep -r ai-engineer C:Usersecporprojetos_gitecp-ai-multi-agent-squad --include=*.md --include=*.json --include=*.mjs)"
     ]
   }
 }

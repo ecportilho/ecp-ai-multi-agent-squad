@@ -83,6 +83,7 @@ Squad de agentes de IA operado com Human in the Loop (HITL), organizado em 4 fas
 | 📋 Product Owner | Discovery | Priorização, épicos, features e histórias |
 | 🏛️ Software Architect | Delivery | Domínio, sistema e decisões técnicas |
 | 🔧 Back End Developer | Delivery | API + persistência + serviços |
+| 🤖 AI Engineer | Delivery | Chatbots, agentes autônomos, RAG e guardrails de IA |
 | 💻 Front End Developer | Delivery | UI + integração + performance |
 | 🧪 QA | Delivery | Qualidade e testes |
 | ⚙️ Operations | Operação | Pipeline, infra, reliability e A/B |
@@ -92,7 +93,7 @@ Squad de agentes de IA operado com Human in the Loop (HITL), organizado em 4 fas
 |------|---------|-------|
 | 01 — Contexto Estratégico | PM | #1 |
 | 02 — Product Discovery | PO → Designer → PO → PM+Designer+PO | #2 #3 #4 #5 #6 |
-| 03 — Product Delivery | Arquiteto → Back End → Front End → QA | #7 #8 #9 #10 |
+| 03 — Product Delivery | Arquiteto → Back End → AI Engineer ∥ Front End → QA | #7 #8 #9 #10 |
 | 04 — Operação de Produto | Ops → PM (A/B) | #11 #12 |
 
 ## Regras Globais
@@ -113,7 +114,7 @@ Definida no `{REPO_DESTINO}/tech_spec.md`. O arquivo `shared/schemas/input-contr
 **Regra:** Nenhum agente escolhe tecnologia sem consultar o `tech_spec.md`.
 
 ## Regras Invioláveis de Código
-Definidas no `{REPO_DESTINO}/tech_spec.md`, seção de regras invioláveis. Todos os agentes de Delivery (Architect, Back End, Front End, QA) devem respeitar essas regras sem exceção.
+Definidas no `{REPO_DESTINO}/tech_spec.md`, seção de regras invioláveis. Todos os agentes de Delivery (Architect, Back End, AI Engineer, Front End, QA) devem respeitar essas regras sem exceção.
 
 ## Output Final do Ciclo
 Ao término da Fase 04 (após HITL #12), o site de documentação é gerado em:

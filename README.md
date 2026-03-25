@@ -1,4 +1,4 @@
-# 🚀 ECP AI Squad — Multi-Agent Product Squad (v3.2)
+# 🚀 ECP AI Squad — Multi-Agent Product Squad (v3.3)
 
 Squad de agentes de IA para desenvolvimento de produto completo — do contexto estratégico ao deploy em produção — operado com Human in the Loop (HITL).
 
@@ -58,7 +58,7 @@ O orquestrador vai:
 |------|---------|-------|---------------|
 | 01 — Contexto Estratégico | PM | #1 | `product_briefing_spec.md` |
 | 02 — Product Discovery | PO, Designer | #2 #3 #4 #5 #6 | `product_briefing_spec.md` + `design_spec.md` |
-| 03 — Product Delivery | Architect, Back, Front, QA | #7 #8 #9 #10 | `tech_spec.md` + `design_spec.md` |
+| 03 — Product Delivery | Architect, Back, AI Engineer, Front, QA | #7 #8 #9 #10 | `tech_spec.md` + `design_spec.md` |
 | 04 — Operação | Ops, PM | #11 #12 | `tech_spec.md` |
 
 ## Protótipos
@@ -82,6 +82,7 @@ ecp-ai-multi-agent-squad/
 │   ├── product-owner/           # Priorização e estruturação
 │   ├── software-architect/      # Domínio e arquitetura
 │   ├── backend-developer/       # API e persistência
+│   ├── ai-engineer/             # Chatbots, agentes IA, RAG e guardrails
 │   ├── frontend-developer/      # Interface e integração
 │   ├── qa/                      # Qualidade e testes
 │   └── operations/              # CI/CD, infra e A/B
