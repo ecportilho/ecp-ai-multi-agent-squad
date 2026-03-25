@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node validate-inputs.mjs \"C:/Users/ecpor/projetos_git/ecp-digital-food\")",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npx vite:*)",
+      "Bash(npx -y acorn --ecma2022 --module --allow-import-export-everywhere src/pages/CreditCardPaymentPage.jsx)",
+      "Bash(tasklist)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(python -m json.tool)",
+      "Bash(curl:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjY2E0M2Y4YzE0NDNkZDYiLCJlbWFpbCI6Im1hcmluYUBlbWFpbC5jb20iLCJyb2xlIjoiY29uc3VtZXIiLCJpYXQiOjE3NzM5NDAxMjQsImV4cCI6MTc3NDAyNjUyNH0.KXF28MvTGryepDUbw988MWmyS5WvcRqxoKX0SX4SC7g\")",
+      "Bash(BANK_TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViMDUwM2ZkLTY1NDItNGMxYy04ODcwLTllNjcyMWVhNDI4NyIsImVtYWlsIjoibWFyaW5hQGVtYWlsLmNvbSIsImlhdCI6MTc3Mzk0MDE0NSwiZXhwIjoxNzc0NTQ0OTQ1fQ.FoPtj09wNCYQTSR-MeaGv6rbKuNVg1JLryid0ZYH44w\")",
+      "Bash(find /c/Users/ecpor/projetos_git/ecp-digital-bank/server/src/modules/cards -type f -name *.ts -o -name *.js)",
+      "Bash(find /c/Users/ecpor/projetos_git/ecp-digital-bank/server/src/modules/payments -type f -name *.ts -o -name *.js)",
+      "Bash(find /c/Users/ecpor/projetos_git/ecp-digital-bank/server/src/database -type f -name *.ts -o -name *.js)",
+      "Bash(rm:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyYzA2MDNkZTRjYTdkZjUiLCJlbWFpbCI6Im1hcmluYUBlbWFpbC5jb20iLCJyb2xlIjoiY29uc3VtZXIiLCJpYXQiOjE3NzM5NDE2MTUsImV4cCI6MTc3NDAyODAxNX0.nOge96nqdTmP856pNHHFnJi1E6v9BstCx7tqMC-iVlE\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)[:5]\\)\")",
+      "Bash(ls -la \"C:/Users/ecpor/projetos_git/ecp-digital-food/\"*.log)",
+      "Bash(find C:/Users/ecpor/projetos_git/ecp-digital-food/docs/ -type f -name *)",
+      "Bash(find C:/Users/ecpor/projetos_git/ecp-digital-food -type f -name *.md)",
+      "Bash(find C:/Users/ecpor/projetos_git/ecp-digital-food/ -maxdepth 2 -name *.json -type f)",
+      "Bash(wmic process:*)",
+      "Bash(find C:/Users/ecpor/projetos_git/ecp-digital-food/03-product-delivery/server -maxdepth 1 -name *.mjs -o -name seed*)",
+      "Bash(grep -r \"opt/foodflow\\\\|/root/\\\\|C:\\\\Users\" C:/Users/ecpor/projetos_git/ecp-digital-food --include=*.json --include=*.js --include=*.mjs --include=*.cjs --exclude-dir=node_modules)",
+      "Bash(xargs wc:*)",
+      "Bash(ls -la \"C:\\\\Users\\\\ecpor\\\\projetos_git\\\\ecp-digital-food\\\\03-product-delivery\\\\.env\"*)",
+      "Bash(ssh -o StrictHostKeyChecking=no root@191.101.78.38 \"pm2 logs foodflow --lines 30 --nostream 2>&1\")"
+    ]
+  }
+}

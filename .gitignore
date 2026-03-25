@@ -1,0 +1,16 @@
+# Outputs de sessão (não versionar dados de runtime)
+shared/memory/context.json
+shared/outputs/
+
+# Node
+app/backend/node_modules/
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
