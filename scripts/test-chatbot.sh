@@ -54,7 +54,7 @@ step "3/7" "Teste 1: Saudação"
 
 info "Enviando: 'Olá, tudo bem?'"
 R1=$(curl -s -X POST "$BANK_URL/api/chat/messages" -H "Content-Type: application/json" -H "$AUTH" -d '{"message":"Olá, tudo bem?"}' 2>/dev/null)
-CONV_ID=$(echo "$R1" | grep -o '"conversationId":"[^"]*"' | cut -d'"' -f4)
+CONV_ID=$(echo "$R1" | grep -o '"conversationId":"[^"]*"' | head -1 | cut -d'"' -f4 | tr -d '\n\r\t ')
 MSG1=$(echo "$R1" | grep -o '"content":"[^"]*"' | head -1 | cut -d'"' -f4)
 
 if [ -n "$CONV_ID" ] && [ -n "$MSG1" ]; then
