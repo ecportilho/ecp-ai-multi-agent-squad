@@ -75,7 +75,7 @@ PAY_TOKEN=$(echo "$PAY_RESP" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
 [ -n "$PAY_TOKEN" ] && ok "Pay admin login — admin@ecpay.dev" || fail "Pay admin login falhou"
 
 # Emps — Brasa & Lenha
-EMPS_RESP=$(curl -s -X POST "$EMPS_URL/auth/pj/dev-login" -H "Content-Type: application/json" -d '{"email":"financeiro@brasaelenha.com.br","password":"Senha@123"}' 2>/dev/null)
+EMPS_RESP=$(curl -s -X POST "$EMPS_URL/auth/pj/dev-login" -H "Content-Type: application/json" -d '{"email":"patricia.werneck@email.com","password":"Senha@123"}' 2>/dev/null)
 EMPS_TOKEN=$(echo "$EMPS_RESP" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
 [ -n "$EMPS_TOKEN" ] && ok "Emps PJ login — Brasa & Lenha" || fail "Emps PJ login falhou"
 
@@ -260,7 +260,7 @@ step "9/10" "Emps — Verificar crédito na conta PJ"
 
 if [ -n "$PJ_BEFORE" ]; then
     # Refresh emps token
-    EMPS_RESP=$(curl -s -X POST "$EMPS_URL/auth/pj/dev-login" -H "Content-Type: application/json" -d '{"email":"financeiro@brasaelenha.com.br","password":"Senha@123"}' 2>/dev/null)
+    EMPS_RESP=$(curl -s -X POST "$EMPS_URL/auth/pj/dev-login" -H "Content-Type: application/json" -d '{"email":"patricia.werneck@email.com","password":"Senha@123"}' 2>/dev/null)
     EMPS_TOKEN=$(echo "$EMPS_RESP" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
 
     if [ -n "$EMPS_TOKEN" ]; then
