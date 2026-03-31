@@ -282,7 +282,7 @@ else
 fi
 
 # ============================================================================
-step "10/10" "Verificar pedido final no Food"
+step "10/14" "Verificar pedido (cartão) no Food"
 # ============================================================================
 
 # Refresh food token
@@ -293,16 +293,108 @@ if [ -n "$FOOD_TOKEN" ] && [ -n "$ORDER_ID" ]; then
     ORDER_FINAL=$(curl -s "$FOOD_URL/api/orders/$ORDER_ID" -H "Authorization: Bearer $FOOD_TOKEN" 2>/dev/null)
     FINAL_STATUS=$(echo "$ORDER_FINAL" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
     FINAL_METHOD=$(echo "$ORDER_FINAL" | grep -o '"payment_method":"[^"]*"' | cut -d'"' -f4)
-    PAY_FINAL=$(echo "$ORDER_FINAL" | grep -o '"status":"[^"]*"' | tail -1 | cut -d'"' -f4)
 
     if [ "$FINAL_STATUS" = "confirmed" ]; then
-        ok "Food: pedido confirmado"
-        data "Pedido: $ORDER_ID"
-        data "Status: $FINAL_STATUS"
-        data "Pagamento: $FINAL_METHOD — $PAY_FINAL"
+        ok "Food: pedido cartão confirmado"
+        data "Pedido: $ORDER_ID | $FINAL_METHOD"
     else
-        fail "Food: pedido não confirmado (status=$FINAL_STATUS)"
+        fail "Food: pedido cartão não confirmado (status=$FINAL_STATUS)"
     fi
+fi
+
+# ============================================================================
+step "11/14" "Teste PIX — Criar pedido + gerar Pix copia e cola"
+# ============================================================================
+
+# Refresh food token
+FOOD_RESP=$(curl -s -X POST "$FOOD_URL/api/auth/login" -H "Content-Type: application/json" -d '{"email":"marina@email.com","password":"Senha@123"}' 2>/dev/null)
+FOOD_TOKEN=$(echo "$FOOD_RESP" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
+
+# Limpar carrinho + adicionar item
+curl -s -X DELETE "$FOOD_URL/api/cart" -H "Authorization: Bearer $FOOD_TOKEN" > /dev/null 2>&1
+MENU2=$(curl -s "$FOOD_URL/api/restaurants/rest_brasa/menu" -H "Authorization: Bearer $FOOD_TOKEN" 2>/dev/null)
+ITEM2_ID=$(echo "$MENU2" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+curl -s -X POST "$FOOD_URL/api/cart/items" -H "Authorization: Bearer $FOOD_TOKEN" -H "Content-Type: application/json" -d "{\"menu_item_id\":\"$ITEM2_ID\",\"quantity\":1}" > /dev/null 2>&1
+
+# Criar pedido Pix
+PIX_ORDER=$(curl -s -X POST "$FOOD_URL/api/orders" -H "Authorization: Bearer $FOOD_TOKEN" -H "Content-Type: application/json" -d '{"payment_method":"pix_qrcode","address_text":"Rua Augusta 1234 SP"}' 2>/dev/null)
+PIX_ORDER_ID=$(echo "$PIX_ORDER" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+PIX_TOTAL=$(echo "$PIX_ORDER" | grep -o '"total":[0-9.]*' | cut -d: -f2)
+
+if [ -n "$PIX_ORDER_ID" ]; then
+    ok "Pedido Pix criado: $PIX_ORDER_ID | R\$ $PIX_TOTAL"
+else
+    fail "Pedido Pix falhou"
+fi
+
+# Gerar Pix
+PIX_RESP=$(curl -s -X POST "$FOOD_URL/api/payments/pix" -H "Authorization: Bearer $FOOD_TOKEN" -H "Content-Type: application/json" -d "{\"order_id\":\"$PIX_ORDER_ID\"}" 2>/dev/null)
+PIX_COPY=$(echo "$PIX_RESP" | grep -o '"pix_copy_paste":"[^"]*"' | cut -d'"' -f4)
+PIX_PAY_ID=$(echo "$PIX_RESP" | grep -o '"payment_id":"[^"]*"' | cut -d'"' -f4)
+
+if [ -n "$PIX_COPY" ]; then
+    ok "Pix copia e cola gerado"
+    data "Payment: $PIX_PAY_ID"
+    data "Código: ${PIX_COPY:0:50}..."
+else
+    fail "Pix copia e cola falhou"
+    info "Raw: ${PIX_RESP:0:200}"
+fi
+
+# ============================================================================
+step "12/14" "Teste PIX — Aguardar confirmação automática"
+# ============================================================================
+
+info "Aguardando auto-settlement (8s)..."
+sleep 8
+
+# Refresh token
+FOOD_RESP=$(curl -s -X POST "$FOOD_URL/api/auth/login" -H "Content-Type: application/json" -d '{"email":"marina@email.com","password":"Senha@123"}' 2>/dev/null)
+FOOD_TOKEN=$(echo "$FOOD_RESP" | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
+
+PIX_ORDER_FINAL=$(curl -s "$FOOD_URL/api/orders/$PIX_ORDER_ID" -H "Authorization: Bearer $FOOD_TOKEN" 2>/dev/null)
+PIX_ORDER_STATUS=$(echo "$PIX_ORDER_FINAL" | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
+
+if [ "$PIX_ORDER_STATUS" = "confirmed" ]; then
+    ok "Pix: pedido confirmado automaticamente"
+else
+    fail "Pix: pedido status=$PIX_ORDER_STATUS (esperava confirmed)"
+fi
+
+# ============================================================================
+step "13/14" "Teste PIX — Verificar no ECP Pay"
+# ============================================================================
+
+PAY_RESP=$(curl -s -X POST "$PAY_URL/admin/auth/login" -H "Content-Type: application/json" -d '{"email":"admin@ecpay.dev","password":"Admin@123"}' 2>/dev/null)
+PAY_TOKEN=$(echo "$PAY_RESP" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
+
+PIX_TXS=$(curl -s "$PAY_URL/admin/transactions?source_app=ecp-food&limit=5" -H "Authorization: Bearer $PAY_TOKEN" 2>/dev/null)
+PIX_TX_FOUND=$(echo "$PIX_TXS" | grep -o '"type":"pix"' | wc -l)
+
+if [ "$PIX_TX_FOUND" -ge 1 ]; then
+    ok "ECP Pay: transação Pix registrada ($PIX_TX_FOUND encontrada(s))"
+else
+    fail "ECP Pay: transação Pix não encontrada"
+fi
+
+# ============================================================================
+step "14/14" "Teste PIX — Verificar split no Emps"
+# ============================================================================
+
+EMPS_RESP=$(curl -s -X POST "$EMPS_URL/auth/pj/dev-login" -H "Content-Type: application/json" -d '{"email":"patricia.werneck@email.com","password":"Senha@123"}' 2>/dev/null)
+EMPS_TOKEN=$(echo "$EMPS_RESP" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
+
+if [ -n "$EMPS_TOKEN" ]; then
+    PJ_FINAL=$(curl -s "$EMPS_URL/pj/accounts/me" -H "Authorization: Bearer $EMPS_TOKEN" 2>/dev/null | grep -o '"balance":[0-9]*' | cut -d: -f2)
+    if [ -n "$PJ_FINAL" ] && [ -n "$PJ_BEFORE" ] && [ "$PJ_FINAL" -gt "$PJ_BEFORE" ]; then
+        PJ_TOTAL_DIFF=$((PJ_FINAL - PJ_BEFORE))
+        ok "Emps: saldo PJ cresceu +$PJ_TOTAL_DIFF centavos (cartão + Pix)"
+        data "Saldo final: $PJ_FINAL centavos"
+    else
+        info "Emps: saldo $PJ_BEFORE → ${PJ_FINAL:-?}"
+    fi
+else
+    info "Emps: login falhou"
 fi
 
 # ============================================================================
@@ -315,14 +407,15 @@ banner "Resultado do Teste E2E"
 echo -e "  ${BOLD}Resumo:${NC} ${GREEN}$PASSED passaram${NC} / ${RED}$FAILED falharam${NC} / $TOTAL total"
 echo ""
 
-echo -e "  ${BOLD}Fluxo testado:${NC}"
+echo -e "  ${BOLD}Fluxo 1 — Cartão de Crédito:${NC}"
 echo -e "    Marina pediu ${BOLD}$ITEM_NAME${NC} no Brasa & Lenha"
 echo -e "    Pagou R\$ ${BOLD}$ORDER_TOTAL${NC} com cartão *${BOLD}$CARD_LAST4${NC}"
+echo -e "    Food → Pay → Bank (fatura) → Emps (split)"
 echo ""
-echo -e "    Food (:3000)  → pedido $ORDER_ID (confirmed)"
-echo -e "    Pay  (:3335)  → transação $TX_ID (completed)"
-echo -e "    Bank (:3333)  → fatura cartão atualizada"
-echo -e "    Emps (:3334)  → split creditado na conta PJ"
+echo -e "  ${BOLD}Fluxo 2 — Pix Copia e Cola:${NC}"
+echo -e "    Marina pediu item no Brasa & Lenha"
+echo -e "    Pagou R\$ ${BOLD}$PIX_TOTAL${NC} com Pix copia e cola"
+echo -e "    Food → Pay → confirmação auto (3s) → Emps (split)"
 echo ""
 
 if [ "$FAILED" -eq 0 ]; then
